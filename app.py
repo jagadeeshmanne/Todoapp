@@ -53,7 +53,9 @@ def create_todo():
     try:
         # description = request.form.get('description', '')
         description = request.get_json()['description']
-        todo = Todo(description=description)
+        list_id = request.get_json()['uri'].split('/')[-1]
+        print(list_id)
+        todo = Todo(description=description, list_id=list_id)
         db.session.add(todo)
         db.session.commit()
         body['id'] = todo.id
@@ -70,6 +72,7 @@ def create_todo():
         abort(500)
     else:
         return jsonify(body)
+        # return redirect(url_for('index')) 
 
 
 @app.route('/todos/<todo_id>/set-completed', methods=['POST'])
